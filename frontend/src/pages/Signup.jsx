@@ -1,8 +1,8 @@
 import { useState } from "react";
 import api from "../services/api";
-import { setToken } from "../services/auth";
 
-export default function Login() {
+export default function Signup() {
+  const [name, setName] = useState("Gopi");
   const [email, setEmail] = useState("gopi@test.com");
   const [password, setPassword] = useState("123456");
   const [loading, setLoading] = useState(false);
@@ -14,15 +14,10 @@ export default function Login() {
     setLoading(true);
 
     try {
-      const res = await api.post("/auth/login", { email, password });
-      const token = res.data?.token;
-
-      if (!token) throw new Error("Token missing");
-
-      setToken(token);
-      window.location.href = "/planner";
+      await api.post("/auth/register", { name, email, password });
+      window.location.href = "/";
     } catch (err) {
-      setMsg(err?.response?.data?.message || "Login failed");
+      setMsg(err?.response?.data?.message || "Signup failed");
     } finally {
       setLoading(false);
     }
@@ -33,9 +28,9 @@ export default function Login() {
       <div className="card p-4 p-md-5" style={{ width: "100%", maxWidth: 520 }}>
         <div className="mb-4">
           <div className="badge badge-soft mb-3">Power System</div>
-          <h2 className="fw-bold mb-1">Welcome back</h2>
+          <h2 className="fw-bold mb-1">Create account</h2>
           <div className="text-subtle">
-            Login to continue your weekly execution system.
+            Start tracking weekly execution like a BatMan.
           </div>
         </div>
 
@@ -44,6 +39,16 @@ export default function Login() {
         ) : null}
 
         <form onSubmit={submit} className="d-flex flex-column gap-3">
+          <div>
+            <label className="form-label text-subtle">Name</label>
+            <input
+              className="form-control form-control-lg"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Your name"
+            />
+          </div>
+
           <div>
             <label className="form-label text-subtle">Email</label>
             <input
@@ -72,20 +77,20 @@ export default function Login() {
             {loading ? (
               <>
                 <span className="spinner-border spinner-border-sm" />
-                Logging in...
+                Creating...
               </>
             ) : (
               <>
-                <i className="bi bi-box-arrow-in-right" />
-                Login
+                <i className="bi bi-person-plus-fill" />
+                Create Account
               </>
             )}
           </button>
 
           <div className="text-center text-subtle">
-            New user?{" "}
-            <a href="/signup" className="text-white fw-semibold">
-              Create account →
+            Already have an account?{" "}
+            <a href="/" className="text-white fw-semibold">
+              Login →
             </a>
           </div>
         </form>

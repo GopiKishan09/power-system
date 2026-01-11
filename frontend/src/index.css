@@ -1,3 +1,102 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: radial-gradient(
+      1000px 500px at 20% -10%,
+      rgba(59, 130, 246, 0.16),
+      transparent 55%
+    ),
+    radial-gradient(
+      900px 420px at 95% 0%,
+      rgba(16, 185, 129, 0.12),
+      transparent 55%
+    ),
+    #05070c;
+  color: #f3f7ff; /* brighter */
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+}
+
+a {
+  text-decoration: none !important;
+}
+
+.text-subtle {
+  color: rgba(243, 247, 255, 0.62) !important;
+}
+
+/* NAVBAR */
+.navbar-premium {
+  background: rgba(5, 7, 12, 0.78);
+  backdrop-filter: blur(10px);
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+/* CARDS */
+.card {
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 18px !important;
+  background: rgba(255, 255, 255, 0.06) !important; /* lighter = readable */
+  backdrop-filter: blur(10px);
+}
+
+/* inner card */
+.card-soft {
+  border: 1px solid rgba(255, 255, 255, 0.07) !important;
+  background: rgba(0, 0, 0, 0.22) !important;
+}
+
+/* INPUTS */
+.form-control,
+.form-select {
+  background: rgba(0, 0, 0, 0.25) !important;
+  border: 1px solid rgba(255, 255, 255, 0.14) !important;
+  color: #f3f7ff !important;
+  border-radius: 14px !important;
+}
+
+.form-control::placeholder {
+  color: rgba(243, 247, 255, 0.5) !important;
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: rgba(99, 179, 237, 0.8) !important;
+  box-shadow: 0 0 0 0.25rem rgba(59, 130, 246, 0.18) !important;
+}
+
+/* BUTTONS */
+.btn {
+  border-radius: 14px !important;
+  font-weight: 600 !important;
+}
+
+.btn-nav {
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  background: rgba(255, 255, 255, 0.06) !important;
+  color: #f3f7ff !important;
+}
+
+.btn-nav:hover {
+  background: rgba(255, 255, 255, 0.1) !important;
+}
+
+.badge-soft {
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.08);
+  color: #f3f7ff;
+}
+
+.card-soft {
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  background: rgba(255, 255, 255, 0.06) !important;
+  color: #f3f7ff !important;
+}
+
+.navbar .btn {
+  white-space: nowrap;
+}

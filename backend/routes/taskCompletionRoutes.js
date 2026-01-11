@@ -29,4 +29,21 @@ router.post("/", auth, async (req, res) => {
   }
 });
 
+
+router.get("/today", auth, async (req, res) => {
+  try {
+    const today = new Date().toISOString().split("T")[0];
+
+    const completions = await TaskCompletion.find({
+      userId: req.userId,
+      date: today,
+    });
+
+    res.json(completions);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+
 module.exports = router;

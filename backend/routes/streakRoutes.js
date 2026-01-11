@@ -3,30 +3,30 @@ const router = express.Router();
 const auth = require("../middleware/authMiddleware");
 const TaskCompletion = require("../models/TaskCompletion");
 
-// helper: YYYY-MM-DD
-const formatDate = (date) => date.toISOString().split("T")[0];
+// helper: date -> YYYY-MM-DD
+const formatDate = (d) => d.toISOString().split("T")[0];
 
 router.get("/", auth, async (req, res) => {
   try {
+    // all completions (sorted latest first)
     const completions = await TaskCompletion.find({
-      userId: req.userId
+      userId: req.userId,
     }).sort({ date: -1 });
 
+    // ✅ unique completion dates set
+    const completionDatesSet = new Set(completions.map((c) => c.date));
+
     let streak = 0;
+    let expectedDate = formatDate(new Date()); // today
 
-    // start from today
-    let expectedDate = formatDate(new Date());
+    // streak = how many continuous days user has ANY completion
+    // (at least 1 task completed on that day)
+    while (completionDatesSet.has(expectedDate)) {
+      streak++;
 
-    for (let record of completions) {
-      if (record.date === expectedDate) {
-        streak++;
-        // move expected date to yesterday
-        const d = new Date(expectedDate);
-        d.setDate(d.getDate() - 1);
-        expectedDate = formatDate(d);
-      } else {
-        break;
-      }
+      const d = new Date(expectedDate);
+      d.setDate(d.getDate() - 1);
+      expectedDate = formatDate(d);
     }
 
     res.json({ streak });

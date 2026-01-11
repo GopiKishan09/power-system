@@ -1,41 +1,46 @@
 const express = require("express");
+const dotenv = require("dotenv");
 const mongoose = require("mongoose");
 const cors = require("cors");
-require("dotenv").config();
+
+dotenv.config();
 
 const app = express();
 
+// Middleware
 app.use(cors());
 app.use(express.json());
 
-mongoose
-  .connect(process.env.MONGO_URI)
-  .then(() => console.log("MongoDB Connected"))
-  .catch(err => console.log(err));
+// Routes
+const authRoutes = require("./routes/authRoutes");
+const taskRoutes = require("./routes/taskRoutes");
+const taskCompletionRoutes = require("./routes/taskCompletionRoutes");
+const analyticsRoutes = require("./routes/analyticsRoutes");
+const plannerRoutes = require("./routes/plannerRoutes");
+const streakRoutes = require("./routes/streakRoutes");
 
-app.listen(5000, () => {
-  console.log("Server running on port 5000");
+// Use routes
+app.use("/api/auth", authRoutes);
+app.use("/api/tasks", taskRoutes);
+app.use("/api/task-completions", taskCompletionRoutes);
+app.use("/api/analytics", analyticsRoutes);
+app.use("/api/planner", plannerRoutes);
+app.use("/api/streak", streakRoutes);
+
+// Base route
+app.get("/", (req, res) => {
+  res.send("Power System Backend Running ✅");
 });
 
-const authRoutes = require("./routes/authRoutes");
+// DB + Server start
+const PORT = process.env.PORT || 5000;
 
-app.use("/api/auth", authRoutes);
-
-const testRoutes = require("./routes/testRoutes");
-app.use("/api/test", testRoutes);
-
-
-const taskRoutes = require("./routes/taskRoutes");
-app.use("/api/tasks", taskRoutes);
-
-
-const taskCompletionRoutes = require("./routes/taskCompletionRoutes");
-app.use("/api/task-completions", taskCompletionRoutes);
-
-
-const analyticsRoutes = require("./routes/analyticsRoutes");
-app.use("/api/analytics", analyticsRoutes);
-
-
-const streakRoutes = require("./routes/streakRoutes");
-app.use("/api/streak", streakRoutes);
+mongoose
+  .connect(process.env.MONGO_URI)
+  .then(() => {
+    console.log("MongoDB Connected");
+    app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+  })
+  .catch((err) => {
+    console.log("MongoDB connection error:", err.message);
+  });
